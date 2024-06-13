@@ -28,6 +28,11 @@ public class Task {
     private LocalDateTime startDateTime;
     private LocalDateTime finishDateTime;
     private Duration maximumResolutionTime;
+    
+    //@OneToMany
+    //@JoinColumn(name = "project_id")
+    //private Project project;
+    // this is used to establish a relation between task and project. Where 1 project could have 0 or many tasks.
 
     public Task(){
     }
