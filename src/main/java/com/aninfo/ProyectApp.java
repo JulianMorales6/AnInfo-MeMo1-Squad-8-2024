@@ -1,21 +1,24 @@
 package com.aninfo;
 
-import com.aninfo.model.Task;
-import com.aninfo.model.Project;
-import com.aninfo.service.ProjectService;
-import com.aninfo.service.TaskService;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import com.aninfo.model.Project;
+import com.aninfo.model.Task;
+import com.aninfo.service.ProjectService;
+import com.aninfo.service.TaskService;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -28,16 +31,32 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class ProyectApp {
 
-
-
 	@Autowired
-	private ProjectService projectService;
+    private ProjectService projectService;
+    @Autowired
+    private TaskService taskService;
 
-	@PostMapping("/projects")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Project creaProject(@RequestBody Project project) {
-		return projectService.createProject(project);
-	}
+    @PostMapping("/projects")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Project creaProject(@RequestBody Project project) {
+        return projectService.createProject(project);
+    }
+
+    @GetMapping("/projects")
+    public Collection<Project> getProjects() {
+        return projectService.getProjects();
+    }
+
+    @PostMapping("/tasks")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Task createTask(@RequestBody Task task) {
+        return taskService.createTask(task);
+    }
+
+    @GetMapping("/tasks")
+    public Collection<Task> getTasks() {
+        return taskService.getTasks();
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectApp.class, args);
@@ -51,4 +70,7 @@ public class ProyectApp {
 			.paths(PathSelectors.any())
 			.build();
 	}
+
+
+
 }
