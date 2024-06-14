@@ -1,6 +1,5 @@
 package com.aninfo.model;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -9,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Task {
@@ -27,57 +28,76 @@ public class Task {
 
     private LocalDateTime startDateTime;
     private LocalDateTime finishDateTime;
-    private Duration maximumResolutionTime;
-    
-    //@OneToMany
-    //@JoinColumn(name = "project_id")
-    //private Project project;
-    // this is used to establish a relation between task and project. Where 1 project could have 0 or many tasks.
+
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    //@ElementCollection
+    //@CollectionTable(name = "task_tickets", joinColumns = @JoinColumn(name = "task_id"))
+    //@Column(name = "ticket_id")
+    //private List<String> ticketIds = new ArrayList<>();
+
 
     public Task(){
     }
 
-    public Task(String title, String description ) {
+    public Task(String title, String description, Project project) {
         this.title = title;
         this.description = description;
         this.state = TaskState.OPEN;
         this.startDateTime = LocalDateTime.now();
+        this.project = project;
     }
 
-    public Task(String title, String description, Duration maximumResolutionTime ) {
+    public Task(String title, String description, TaskPriority priority, Project project) {
         this.title = title;
         this.description = description;
         this.state = TaskState.OPEN;
         this.startDateTime = LocalDateTime.now();
-        this.maximumResolutionTime = maximumResolutionTime;
+        this.priority = priority;
+        this.project = project;
+    }
+
+    public Task(String title, String description, Long assignedEmployee, TaskPriority priority, Project project) {
+        this.title = title;
+        this.description = description;
+        this.state = TaskState.OPEN;
+        this.assignedEmployee = assignedEmployee;
+        this.startDateTime = LocalDateTime.now();
+        this.priority = priority;
+        this.project = project;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public Long getAssignedEmployee() {
-        return assignedEmployee;
+        return this.assignedEmployee;
     }
 
     public TaskState getState() {
-        return state;
+        return this.state;
     }
 
     public LocalDateTime getStartDate() {
-        return startDateTime;
+        return this.startDateTime;
     }
 
     public LocalDateTime getFinishDate() {
-        return finishDateTime;
+        return this.finishDateTime;
     }
 
-    public Duration getMaximumResolutionTime() {
-        return maximumResolutionTime;
+    public TaskPriority getPriority() {
+        return this.priority;
     }
 
     public void assignEmployee(Long assignedEmployee) {
@@ -85,11 +105,9 @@ public class Task {
         this.state = TaskState.PROGRESS;
     }
 
-
     public void close() {
         this.state = TaskState.CLOSED;
     }
-
 
     public void block() {
         this.state = TaskState.BLOCKED;

@@ -1,13 +1,17 @@
 package com.aninfo.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
+import javax.persistence.GeneratedValue;//THIS SHOULD BE REPLACED WITH THE NECESSARY
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Project {
@@ -24,8 +28,11 @@ public class Project {
     private Long assignedLeader;
 
     private LocalDateTime startDateTime;
-    private LocalDateTime finishDateTime;
-    
+    private LocalDateTime finishDateTime;    
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Task> tasks = new HashSet<>();
+
     public Project(){
     }
 
@@ -37,27 +44,31 @@ public class Project {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public Long getAssignedLeader() {
-        return assignedLeader;
+        return this.assignedLeader;
     }
 
     public ProjectState getState() {
-        return state;
+        return this.state;
     }
 
     public LocalDateTime getStartDate() {
-        return startDateTime;
+        return this.startDateTime;
     }
 
     public LocalDateTime getFinishDate() {
-        return finishDateTime;
+        return this.finishDateTime;
+    }
+
+    public Set<Task> getTasks() {
+        return this.tasks;
     }
 
     public void assignEmployee(Long assignedLeader) {
@@ -65,11 +76,9 @@ public class Project {
         this.state = ProjectState.PROGRESS;
     }
 
-
     public void close() {
         this.state = ProjectState.CLOSED;
     }
-
 
     public void block() {
         this.state = ProjectState.BLOCKED;
@@ -79,6 +88,14 @@ public class Project {
         this.state = ProjectState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
     }
+/*
+    public void setTask(Task task) {
+        this.tasks.add(task);
+    }
 
-
+    public void removeTask(Task task) {
+        //should destroy task
+        tasks.remove(task);
+    }
+*/
 }
