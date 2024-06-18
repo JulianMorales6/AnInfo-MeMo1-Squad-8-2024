@@ -67,6 +67,10 @@ public class Project {
         return this.startDateTime;
     }
 
+    public void setStartDate(LocalDateTime start_date) {
+        this.startDateTime = start_date;
+    }
+
     public LocalDateTime getFinishDate() {
         return this.finishDateTime;
     }

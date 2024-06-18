@@ -33,7 +33,7 @@ public class Task {
     private TaskPriority priority;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = true)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     //@ElementCollection
@@ -120,6 +120,10 @@ public class Task {
     public void finish() {
         this.state = TaskState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
+    }
+
+    public void setProject(Project project) {
+       this.project = project;
     }
 
 }
