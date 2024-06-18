@@ -14,7 +14,6 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     public Project createProject(Project Project) {
-        projectRepository.save(Project);
         return projectRepository.save(Project);
     }
 
