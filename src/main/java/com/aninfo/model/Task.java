@@ -41,6 +41,10 @@ public class Task {
     //@Column(name = "ticket_id")
     //private List<String> ticketIds = new ArrayList<>();
 
+    public Long getId() {
+        return id;
+    }
+
 
     public Task(){
     }
@@ -75,7 +79,7 @@ public class Task {
     public String getTitle() {
         return this.title;
     }
-
+    
     public String getDescription() {
         return this.description;
     }
