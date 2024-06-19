@@ -1,17 +1,13 @@
 package com.aninfo.model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;//THIS SHOULD BE REPLACED WITH THE NECESSARY
+import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Project {
@@ -29,10 +25,10 @@ public class Project {
 
     private LocalDateTime startDateTime;
     private LocalDateTime finishDateTime;    
-
+/*
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Task> tasks = new HashSet<>();
-
+*/
     public Project(){
     }
 
@@ -74,11 +70,11 @@ public class Project {
     public LocalDateTime getFinishDate() {
         return this.finishDateTime;
     }
-
+/*
     public Set<Task> getTasks() {
         return this.tasks;
     }
-
+*/
     public void assignEmployee(Long assignedLeader) {
         this.assignedLeader = assignedLeader;
         this.state = ProjectState.PROGRESS;
