@@ -33,13 +33,17 @@ public class Task {
     private TaskPriority priority;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = true)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     //@ElementCollection
     //@CollectionTable(name = "task_tickets", joinColumns = @JoinColumn(name = "task_id"))
     //@Column(name = "ticket_id")
     //private List<String> ticketIds = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
 
 
     public Task(){
@@ -75,7 +79,7 @@ public class Task {
     public String getTitle() {
         return this.title;
     }
-
+    
     public String getDescription() {
         return this.description;
     }
@@ -116,6 +120,10 @@ public class Task {
     public void finish() {
         this.state = TaskState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
+    }
+
+    public void setProject(Project project) {
+       this.project = project;
     }
 
 }

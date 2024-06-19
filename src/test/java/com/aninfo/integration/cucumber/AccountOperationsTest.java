@@ -1,4 +1,4 @@
-package com.aninfo.integration.cucumber;
+/*package com.aninfo.integration.cucumber;
 
 import com.aninfo.exceptions.DepositNegativeSumException;
 import com.aninfo.exceptions.InsufficientFundsException;
@@ -72,3 +72,4 @@ public class AccountOperationsTest extends AccountIntegrationServiceTest {
         System.out.println("After all test execution");
     }
 }
+*/

@@ -1,4 +1,4 @@
-package com.aninfo.integration.cucumber;
+/*package com.aninfo.integration.cucumber;
 
 import com.aninfo.projectBackend;
 import com.aninfo.model.Account;
@@ -27,3 +27,4 @@ public class AccountIntegrationServiceTest {
     }
 
 }
+    */

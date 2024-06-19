@@ -43,6 +43,10 @@ public class Project {
         this.startDateTime = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -61,6 +65,10 @@ public class Project {
 
     public LocalDateTime getStartDate() {
         return this.startDateTime;
+    }
+
+    public void setStartDate(LocalDateTime start_date) {
+        this.startDateTime = start_date;
     }
 
     public LocalDateTime getFinishDate() {

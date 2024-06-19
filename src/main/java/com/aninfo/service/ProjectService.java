@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Optional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ProjectService {
 
@@ -14,7 +16,7 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     public Project createProject(Project Project) {
-        projectRepository.save(Project);
+        Project.setStartDate(LocalDateTime.now());
         return projectRepository.save(Project);
     }
 
