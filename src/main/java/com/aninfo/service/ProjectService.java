@@ -1,13 +1,15 @@
 package com.aninfo.service;
 
-import com.aninfo.model.Project;
-import com.aninfo.repository.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
-import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.aninfo.model.Project;
+import com.aninfo.model.ProjectState;
+import com.aninfo.repository.ProjectRepository;
 
 @Service
 public class ProjectService {
@@ -17,6 +19,9 @@ public class ProjectService {
 
     public Project createProject(Project Project) {
         Project.setStartDate(LocalDateTime.now());
+        if( Project.getState() == null ) {
+            Project.setState(ProjectState.OPEN);
+        }
         return projectRepository.save(Project);
     }
 

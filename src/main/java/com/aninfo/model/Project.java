@@ -75,6 +75,11 @@ public class Project {
         return this.tasks;
     }
 */
+
+    public void setState(ProjectState state) {
+        this.state = state;
+    }
+
     public void assignEmployee(Long assignedLeader) {
         this.assignedLeader = assignedLeader;
         this.state = ProjectState.PROGRESS;
