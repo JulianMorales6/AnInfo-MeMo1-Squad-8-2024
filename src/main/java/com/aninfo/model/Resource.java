@@ -1,17 +1,9 @@
 package com.aninfo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
 public class Resource {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty("legajo")
     private Long id;
     @JsonProperty("Nombre")
