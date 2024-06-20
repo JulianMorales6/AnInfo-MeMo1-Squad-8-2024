@@ -1,6 +1,5 @@
 package com.aninfo.service;
 
-import com.aninfo.model.Project;
 import com.aninfo.model.Task;
 import com.aninfo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
