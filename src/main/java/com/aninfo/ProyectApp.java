@@ -1,13 +1,14 @@
 package com.aninfo;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.aninfo.model.Project;
+import com.aninfo.model.Resource;
 import com.aninfo.model.Task;
 import com.aninfo.service.ProjectService;
+import com.aninfo.service.ResourceService;
 import com.aninfo.service.TaskService;
 
 import springfox.documentation.builders.PathSelectors;
@@ -26,9 +30,6 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -40,6 +41,8 @@ public class ProyectApp {
     private ProjectService projectService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private ResourceService resourceService;
 
     @PostMapping("/projects")
     @ResponseStatus(HttpStatus.CREATED)
@@ -82,6 +85,11 @@ public class ProyectApp {
         return taskService.getTasks();
     }
 
+    @GetMapping("/resources")
+    public List<Resource> getAllResources() {
+        return resourceService.getResources();
+    }
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectApp.class, args);
 	}
@@ -95,6 +103,9 @@ public class ProyectApp {
 			.build();
 	}
 
-
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
 }
