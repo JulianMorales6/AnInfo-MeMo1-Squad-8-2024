@@ -66,11 +66,11 @@ public class ProyectApp {
     }
     */
 
-    @PostMapping("/projects/{projectId}/tasks")
+    @PostMapping("/projects/{project_id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTaskToProject(@PathVariable Long projectId, @RequestBody Task task) {
+    public Task addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
         
-        Optional<Project> projectOpt = projectService.findById(projectId);
+        Optional<Project> projectOpt = projectService.findById(project_id);
         Project project = projectOpt.get();
         task.setProject(project);
         return taskService.createTask(task);
@@ -81,6 +81,13 @@ public class ProyectApp {
     public Collection<Task> getTasks() {
         return taskService.getTasks();
     }
+
+    @PutMapping("/projects/{project_id}/{assigned_leader}")
+	public ResponseEntity<Project> updateProject(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
+
+        projectService.assignLeader(project_id, assigned_leader);
+        return ResponseEntity.ok().build();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectApp.class, args);
