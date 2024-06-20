@@ -51,6 +51,7 @@ public class ProyectApp {
     public Collection<Project> getProjects() {
         return projectService.getProjects();
     }
+    
     /*
     @PostMapping("/tasks")
     @ResponseStatus(HttpStatus.CREATED)
@@ -89,6 +90,13 @@ public class ProyectApp {
         return ResponseEntity.ok().build();
 	}
 
+    @PutMapping("/tasks/{task_id}/{assigned_employee}")
+	public ResponseEntity<Project> updateTask(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
+
+        taskService.assignEmployee(task_id, assigned_employee);
+        return ResponseEntity.ok().build();
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectApp.class, args);
 	}
@@ -101,7 +109,4 @@ public class ProyectApp {
 			.paths(PathSelectors.any())
 			.build();
 	}
-
-
-
 }

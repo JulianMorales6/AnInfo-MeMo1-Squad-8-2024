@@ -1,5 +1,6 @@
 package com.aninfo.service;
 
+import com.aninfo.model.Project;
 import com.aninfo.model.Task;
 import com.aninfo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,11 @@ public class TaskService {
 
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    public void assignEmployee(Long task_id, Long assigned_Employee) {
+        Task task = taskRepository.findTaskById(task_id);
+        task.assignEmployee(assigned_Employee);
+        taskRepository.save(task);
     }
 }

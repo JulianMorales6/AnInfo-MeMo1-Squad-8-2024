@@ -45,5 +45,6 @@ public class ProjectService {
     public void assignLeader(Long project_id, Long assigned_leader) {
         Project project = projectRepository.findProjectById(project_id);
         project.assignLeader(assigned_leader);
+        projectRepository.save(project);
     }
 }
