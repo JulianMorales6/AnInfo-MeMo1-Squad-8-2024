@@ -79,7 +79,7 @@ public class Project {
         this.assignedLeader = assignedLeader;
         this.state = ProjectState.PROGRESS;
     }
-
+/*
     public void close() {
         this.state = ProjectState.CLOSED;
     }
@@ -87,7 +87,7 @@ public class Project {
     public void block() {
         this.state = ProjectState.BLOCKED;
     }
-
+*/
     public void finish() {
         this.state = ProjectState.FINISHED;
         this.finishDateTime = LocalDateTime.now();

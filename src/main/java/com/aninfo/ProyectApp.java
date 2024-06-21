@@ -63,20 +63,39 @@ public class ProyectApp {
         return taskService.getTasks();
     }
 
-    @PutMapping("/projects/{project_id}/{assigned_leader}")
-	public ResponseEntity<Project> updateProjectLeader(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
+    @PutMapping("/projects")
+    public ResponseEntity<Project> updateProject(
+            @RequestParam(name = "project_id", required = true) Long project_id,
+            @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
+            @RequestParam(name = "state", required = false) String state) {
+        
+        if (assigned_leader != null)
+            projectService.assignLeader(project_id, assigned_leader);
+  
+        if (state != null)
+            projectService.changeState(project_id, state);
 
-        projectService.assignLeader(project_id, assigned_leader);
         return ResponseEntity.ok().build();
-	}
+    }
 
-    @PutMapping("/projects/current/{project_id}/{state}")
-	public ResponseEntity<Project> updateProjectState(@PathVariable Long project_id , @PathVariable String state) {
+    @PutMapping("/tasks")
+    public ResponseEntity<Project> updateTask(
+            @RequestParam(name = "task_id", required = true) Long task_id,
+            @RequestParam(name = "assigned_employee", required = false) Long assigned_employee,
+            @RequestParam(name = "state", required = false) String state,
+            @RequestParam(name = "priority", required = false) String priority) {
+        
+        if (assigned_employee != null)
+            taskService.assignEmployee(task_id, assigned_employee);
+  
+        if (state != null)
+            taskService.changeState(task_id, state);        
+        if (priority != null)
+            taskService.changePriority(task_id, priority);
 
-        projectService.changeState(project_id, state);
         return ResponseEntity.ok().build();
-	}
-    
+    }
+
     @PutMapping("/tasks/{task_id}/{assigned_employee}")
 	public ResponseEntity<Project> updateTaskEmployee(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
 

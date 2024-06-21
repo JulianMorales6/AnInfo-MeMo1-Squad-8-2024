@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aninfo.model.Project;
@@ -51,15 +50,16 @@ public class ProjectService {
     public void changeState(Long project_id, String state) {
         Project project = projectRepository.findProjectById(project_id);
 
-        if (state == ProjectState.BLOCKED.toString()) {
-            project.block();
+        if (state.equals(ProjectState.BLOCKED.toString())) {
+            project.setState(ProjectState.BLOCKED);
         }
-        else if (state == ProjectState.CLOSED.toString()) {
-            project.close();
+        else if (state.equals(ProjectState.CLOSED.toString())) {
+            project.setState(ProjectState.CLOSED);
         }
-        else if (state == ProjectState.FINISHED.toString()) {
-            project.finish();
+        else if (state.equals(ProjectState.FINISHED.toString())) {
+            project.setState(ProjectState.FINISHED);
         }
         projectRepository.save(project);
     }
+
 }

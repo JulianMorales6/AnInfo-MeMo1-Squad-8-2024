@@ -109,21 +109,21 @@ public class Task {
         this.state = TaskState.PROGRESS;
     }
 
-    public void close() {
-        this.state = TaskState.CLOSED;
+    public void setProject(Project project) {
+       this.project = project;
     }
 
-    public void block() {
-        this.state = TaskState.BLOCKED;
+    public void setState(TaskState state) {
+        this.state = state;
+    }
+
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
     }
 
     public void finish() {
         this.state = TaskState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
-    }
-
-    public void setProject(Project project) {
-       this.project = project;
     }
 
 }
