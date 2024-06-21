@@ -45,7 +45,6 @@ public class Task {
         return id;
     }
 
-
     public Task(){
     }
 
@@ -125,5 +124,4 @@ public class Task {
         this.state = TaskState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
     }
-
 }
