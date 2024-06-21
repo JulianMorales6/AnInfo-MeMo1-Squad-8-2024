@@ -124,4 +124,8 @@ public class Task {
         this.state = TaskState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
     }
+
+    public void setStartDate(LocalDateTime start_date) {
+        this.startDateTime = start_date;
+    }
 }

@@ -1,8 +1,6 @@
 package com.aninfo;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -11,21 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 import com.aninfo.model.Project;
-import com.aninfo.model.Resource;
 import com.aninfo.model.Task;
 import com.aninfo.service.ProjectService;
-import com.aninfo.service.ResourceService;
 import com.aninfo.service.TaskService;
 
 import springfox.documentation.builders.PathSelectors;
@@ -33,6 +19,9 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.bind.annotation.*;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.HttpStatus;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -44,8 +33,6 @@ public class ProyectApp {
     private ProjectService projectService;
     @Autowired
     private TaskService taskService;
-    @Autowired
-    private ResourceService resourceService;
 
     @PostMapping("/projects")
     @ResponseStatus(HttpStatus.CREATED)
@@ -87,12 +74,10 @@ public class ProyectApp {
   
         if (state != null)
             projectService.changeState(project_id, state);
-  
-    @GetMapping("/resources")
-    public List<Resource> getAllResources() {
-        return resourceService.getResources();
+
+        return ResponseEntity.ok().build();
     }
-  
+
     @PutMapping("/tasks")
     public ResponseEntity<Project> updateTask(
             @RequestParam(name = "task_id", required = true) Long task_id,
@@ -111,6 +96,17 @@ public class ProyectApp {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/tasks/{task_id}/{assigned_employee}")
+	public ResponseEntity<Project> updateTaskEmployee(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
+
+        taskService.assignEmployee(task_id, assigned_employee);
+        return ResponseEntity.ok().build();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProyectApp.class, args);
+	}
+
 	@Bean
 	public Docket apiDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -119,10 +115,4 @@ public class ProyectApp {
 			.paths(PathSelectors.any())
 			.build();
 	}
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
 }
