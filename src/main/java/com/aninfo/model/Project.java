@@ -80,7 +80,7 @@ public class Project {
         this.state = state;
     }
 
-    public void assignEmployee(Long assignedLeader) {
+    public void assignLeader(Long assignedLeader) {
         this.assignedLeader = assignedLeader;
         this.state = ProjectState.PROGRESS;
     }

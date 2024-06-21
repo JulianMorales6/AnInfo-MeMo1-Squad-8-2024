@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aninfo.model.Project;
@@ -39,5 +40,11 @@ public class ProjectService {
 
     public void deleteById(Long cbu) {
         projectRepository.deleteById(cbu);
+    }
+
+    public void assignLeader(Long project_id, Long assigned_leader) {
+        Project project = projectRepository.findProjectById(project_id);
+        project.assignLeader(assigned_leader);
+        projectRepository.save(project);
     }
 }

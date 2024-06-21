@@ -28,6 +28,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -52,6 +53,7 @@ public class ProyectApp {
     public Collection<Project> getProjects() {
         return projectService.getProjects();
     }
+    
     /*
     @PostMapping("/tasks")
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,11 +69,11 @@ public class ProyectApp {
     }
     */
 
-    @PostMapping("/projects/{projectId}/tasks")
+    @PostMapping("/projects/{project_id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTaskToProject(@PathVariable Long projectId, @RequestBody Task task) {
+    public Task addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
         
-        Optional<Project> projectOpt = projectService.findById(projectId);
+        Optional<Project> projectOpt = projectService.findById(project_id);
         Project project = projectOpt.get();
         task.setProject(project);
         return taskService.createTask(task);
@@ -87,6 +89,20 @@ public class ProyectApp {
     public List<Resource> getAllResources() {
         return resourceService.getResources();
     }
+  
+    @PutMapping("/projects/{project_id}/{assigned_leader}")
+	public ResponseEntity<Project> updateProject(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
+
+        projectService.assignLeader(project_id, assigned_leader);
+        return ResponseEntity.ok().build();
+	}
+
+    @PutMapping("/tasks/{task_id}/{assigned_employee}")
+	public ResponseEntity<Project> updateTask(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
+
+        taskService.assignEmployee(task_id, assigned_employee);
+        return ResponseEntity.ok().build();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectApp.class, args);
