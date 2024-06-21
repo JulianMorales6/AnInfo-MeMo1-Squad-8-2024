@@ -1,11 +1,16 @@
 package com.aninfo.service;
 
-import com.aninfo.model.Task;
-import com.aninfo.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.aninfo.model.Task;
+import com.aninfo.model.TaskPriority;
+import com.aninfo.model.TaskState;
+import com.aninfo.repository.TaskRepository;
 
 @Service
 public class TaskService {
@@ -14,6 +19,15 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public Task createTask(Task Task) {
+        if(Task.getStartDate() == null) {
+            Task.setStartDate(LocalDateTime.now());
+        }
+        if(Task.getPriority() == null) {
+            Task.setPriority(TaskPriority.LOW);
+        }
+        if(Task.getState() == null) {
+            Task.setState(TaskState.OPEN);
+        }
         return taskRepository.save(Task);
     }
 

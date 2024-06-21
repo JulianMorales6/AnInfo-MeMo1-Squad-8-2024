@@ -45,7 +45,6 @@ public class Task {
         return id;
     }
 
-
     public Task(){
     }
 
@@ -124,6 +123,18 @@ public class Task {
 
     public void setProject(Project project) {
        this.project = project;
+    }
+
+    public void setStartDate(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public void setState(TaskState state) {
+        this.state = state;
+    }
+
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
     }
 
 }
