@@ -1,5 +1,6 @@
 package com.aninfo.service;
 
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
@@ -50,6 +51,34 @@ public class TaskService {
     public void assignEmployee(Long task_id, Long assigned_Employee) {
         Task task = taskRepository.findTaskById(task_id);
         task.assignEmployee(assigned_Employee);
+        taskRepository.save(task);
+    }
+
+    public void changeState(Long task_id, String state) {
+        Task task = taskRepository.findTaskById(task_id);
+
+        if (state.equals(TaskState.BLOCKED.toString())) {
+            task.setState(TaskState.BLOCKED);
+        }
+        else if (state.equals(TaskState.CLOSED.toString())) {
+            task.setState(TaskState.CLOSED);
+        }
+        else if (state.equals(TaskState.FINISHED.toString())) {
+            task.setState(TaskState.FINISHED);
+        }
+        taskRepository.save(task);
+    }
+
+    public void changePriority(Long task_id, String priority) {
+        Task task = taskRepository.findTaskById(task_id);
+
+        if (priority.equals(TaskPriority.HIGH.toString()))
+            task.setPriority(TaskPriority.HIGH);
+        else if (priority.equals(TaskPriority.MEDIUM.toString()))
+            task.setPriority(TaskPriority.MEDIUM);
+        else if (priority.equals(TaskPriority.LOW.toString()))
+            task.setPriority(TaskPriority.LOW);
+
         taskRepository.save(task);
     }
 }

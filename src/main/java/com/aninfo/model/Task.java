@@ -108,25 +108,8 @@ public class Task {
         this.state = TaskState.PROGRESS;
     }
 
-    public void close() {
-        this.state = TaskState.CLOSED;
-    }
-
-    public void block() {
-        this.state = TaskState.BLOCKED;
-    }
-
-    public void finish() {
-        this.state = TaskState.FINISHED;
-        this.finishDateTime = LocalDateTime.now();
-    }
-
     public void setProject(Project project) {
        this.project = project;
-    }
-
-    public void setStartDate(LocalDateTime startDateTime) {
-        this.startDateTime = startDateTime;
     }
 
     public void setState(TaskState state) {
@@ -137,4 +120,8 @@ public class Task {
         this.priority = priority;
     }
 
+    public void finish() {
+        this.state = TaskState.FINISHED;
+        this.finishDateTime = LocalDateTime.now();
+    }
 }

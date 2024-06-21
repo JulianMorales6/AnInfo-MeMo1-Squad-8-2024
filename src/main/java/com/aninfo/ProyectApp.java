@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,20 +58,7 @@ public class ProyectApp {
         return projectService.getProjects();
     }
     
-    /*
-    @PostMapping("/tasks")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
-    }
-    //@GetMapping("/transactions/{cbu}/{id}")
-    
-    @PostMapping("/tasks/{project_id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task, @PathVariable Long project_id) {
-        return taskService.createTask(task);
-    }
-    */
+
 
     @PostMapping("/projects/{project_id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
@@ -88,28 +76,40 @@ public class ProyectApp {
         return taskService.getTasks();
     }
 
+    @PutMapping("/projects")
+    public ResponseEntity<Project> updateProject(
+            @RequestParam(name = "project_id", required = true) Long project_id,
+            @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
+            @RequestParam(name = "state", required = false) String state) {
+        
+        if (assigned_leader != null)
+            projectService.assignLeader(project_id, assigned_leader);
+  
+        if (state != null)
+            projectService.changeState(project_id, state);
+  
     @GetMapping("/resources")
     public List<Resource> getAllResources() {
         return resourceService.getResources();
     }
   
-    @PutMapping("/projects/{project_id}/{assigned_leader}")
-	public ResponseEntity<Project> updateProject(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
+    @PutMapping("/tasks")
+    public ResponseEntity<Project> updateTask(
+            @RequestParam(name = "task_id", required = true) Long task_id,
+            @RequestParam(name = "assigned_employee", required = false) Long assigned_employee,
+            @RequestParam(name = "state", required = false) String state,
+            @RequestParam(name = "priority", required = false) String priority) {
+        
+        if (assigned_employee != null)
+            taskService.assignEmployee(task_id, assigned_employee);
+  
+        if (state != null)
+            taskService.changeState(task_id, state);        
+        if (priority != null)
+            taskService.changePriority(task_id, priority);
 
-        projectService.assignLeader(project_id, assigned_leader);
         return ResponseEntity.ok().build();
-	}
-
-    @PutMapping("/tasks/{task_id}/{assigned_employee}")
-	public ResponseEntity<Project> updateTask(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
-
-        taskService.assignEmployee(task_id, assigned_employee);
-        return ResponseEntity.ok().build();
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(ProyectApp.class, args);
-	}
+    }
 
 	@Bean
 	public Docket apiDocket() {
