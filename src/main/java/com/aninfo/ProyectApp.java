@@ -8,13 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.aninfo.model.Project;
 import com.aninfo.model.Task;
@@ -52,20 +45,7 @@ public class ProyectApp {
         return projectService.getProjects();
     }
     
-    /*
-    @PostMapping("/tasks")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
-    }
-    //@GetMapping("/transactions/{cbu}/{id}")
-    
-    @PostMapping("/tasks/{project_id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task, @PathVariable Long project_id) {
-        return taskService.createTask(task);
-    }
-    */
+
 
     @PostMapping("/projects/{project_id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
@@ -84,14 +64,21 @@ public class ProyectApp {
     }
 
     @PutMapping("/projects/{project_id}/{assigned_leader}")
-	public ResponseEntity<Project> updateProject(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
+	public ResponseEntity<Project> updateProjectLeader(@PathVariable Long project_id , @PathVariable Long assigned_leader) {
 
         projectService.assignLeader(project_id, assigned_leader);
         return ResponseEntity.ok().build();
 	}
 
+    @PutMapping("/projects/current/{project_id}/{state}")
+	public ResponseEntity<Project> updateProjectState(@PathVariable Long project_id , @PathVariable String state) {
+
+        projectService.changeState(project_id, state);
+        return ResponseEntity.ok().build();
+	}
+    
     @PutMapping("/tasks/{task_id}/{assigned_employee}")
-	public ResponseEntity<Project> updateTask(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
+	public ResponseEntity<Project> updateTaskEmployee(@PathVariable Long task_id , @PathVariable Long assigned_employee) {
 
         taskService.assignEmployee(task_id, assigned_employee);
         return ResponseEntity.ok().build();

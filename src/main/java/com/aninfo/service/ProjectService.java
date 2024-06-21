@@ -47,4 +47,19 @@ public class ProjectService {
         project.assignLeader(assigned_leader);
         projectRepository.save(project);
     }
+
+    public void changeState(Long project_id, String state) {
+        Project project = projectRepository.findProjectById(project_id);
+
+        if (state == ProjectState.BLOCKED.toString()) {
+            project.block();
+        }
+        else if (state == ProjectState.CLOSED.toString()) {
+            project.close();
+        }
+        else if (state == ProjectState.FINISHED.toString()) {
+            project.finish();
+        }
+        projectRepository.save(project);
+    }
 }

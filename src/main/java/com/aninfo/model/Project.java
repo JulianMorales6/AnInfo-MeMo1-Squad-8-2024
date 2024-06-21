@@ -70,11 +70,6 @@ public class Project {
     public LocalDateTime getFinishDate() {
         return this.finishDateTime;
     }
-/*
-    public Set<Task> getTasks() {
-        return this.tasks;
-    }
-*/
 
     public void setState(ProjectState state) {
         this.state = state;
@@ -97,14 +92,4 @@ public class Project {
         this.state = ProjectState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
     }
-/*
-    public void setTask(Task task) {
-        this.tasks.add(task);
-    }
-
-    public void removeTask(Task task) {
-        //should destroy task
-        tasks.remove(task);
-    }
-*/
 }
