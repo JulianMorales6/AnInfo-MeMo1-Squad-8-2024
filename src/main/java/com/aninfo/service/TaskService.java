@@ -21,7 +21,7 @@ public class TaskService {
 
     public Task createTask(Task Task) {
         if(Task.getStartDate() == null) {
-            Task.setStartDate(LocalDateTime.now());
+            Task.setStartDateTime(LocalDateTime.now());
         }
         if(Task.getPriority() == null) {
             Task.setPriority(TaskPriority.LOW);

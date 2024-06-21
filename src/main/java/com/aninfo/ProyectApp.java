@@ -10,13 +10,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +33,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -57,8 +58,6 @@ public class ProyectApp {
     public Collection<Project> getProjects() {
         return projectService.getProjects();
     }
-    
-
 
     @PostMapping("/projects/{project_id}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
@@ -87,7 +86,11 @@ public class ProyectApp {
   
         if (state != null)
             projectService.changeState(project_id, state);
-  
+            
+        return ResponseEntity.ok().build();
+        }
+
+
     @GetMapping("/resources")
     public List<Resource> getAllResources() {
         return resourceService.getResources();
@@ -109,6 +112,10 @@ public class ProyectApp {
             taskService.changePriority(task_id, priority);
 
         return ResponseEntity.ok().build();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(ProyectApp.class, args);
     }
 
 	@Bean
