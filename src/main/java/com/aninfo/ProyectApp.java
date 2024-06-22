@@ -106,8 +106,11 @@ public class ProyectApp {
             @RequestParam(name = "state", required = false) String state) {
         
         if (assigned_leader != null)
-            projectService.assignLeader(project_id, assigned_leader);
-  
+            if(!resourceService.resourceExists(assigned_leader)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                projectService.assignLeader(project_id, assigned_leader);
+            }
         if (state != null)
             projectService.changeState(project_id, state);
             
