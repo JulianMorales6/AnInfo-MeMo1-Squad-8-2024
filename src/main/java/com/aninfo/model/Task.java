@@ -2,11 +2,14 @@ package com.aninfo.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -42,9 +45,11 @@ public class Task {
     private Project project;
 
     @ElementCollection
-    @CollectionTable(name = "task_ticket", joinColumns = @JoinColumn(name = "task_id"))
-    @Column(name = "ticket_id")
-    private List<Long> associatedTickets = new ArrayList<>();
+    @CollectionTable(name = "task_ticket_associations", joinColumns = @JoinColumn(name = "task_id"))
+    private List<TicketAssociation> associatedTickets = new ArrayList<>();
+
+    //private list<Long, String> associatedTickets = new HashMap<>();
+    //private List<Long> associatedTickets = new ArrayList<>();
 
     //@ElementCollection
     //@CollectionTable(name = "task_tickets", joinColumns = @JoinColumn(name = "task_id"))
@@ -139,19 +144,52 @@ public class Task {
         this.startDateTime = startDateTime;
     }
 
-    public List<Long> getAssociatedTickets() {
+    public List<TicketAssociation> getAssociatedTickets() {
         return this.associatedTickets;
     }
-
+/*
     public void setAssociatedTickets(List<Long> associatedTickets) {
         this.associatedTickets = associatedTickets;
     }
-
+*/
     public void associateTicket(Long associatedTicket) {
-        this.associatedTickets.add(associatedTicket);
+
+        TicketAssociation association = new TicketAssociation(associatedTicket, LocalDateTime.now());
+        this.associatedTickets.add(association);
     }
     
     public void disassociateTicket(Long disassociatedTicket) {
-        this.associatedTickets.remove(disassociatedTicket);
+        this.associatedTickets.removeIf(association -> association.getTicketId().equals(disassociatedTicket));
     }
+
+    @Embeddable
+    public static class TicketAssociation {
+        private Long ticketId;
+        private LocalDateTime associationDate;
+
+        public TicketAssociation() {
+        }
+
+        public TicketAssociation(Long ticketId, LocalDateTime associationDate) {
+            this.ticketId = ticketId;
+            this.associationDate = associationDate;
+        }
+
+        public Long getTicketId() {
+            return ticketId;
+        }
+
+        public void setTicketId(Long ticketId) {
+            this.ticketId = ticketId;
+        }
+
+        public LocalDateTime getAssociationDate() {
+            return associationDate;
+        }
+
+        public void setAssociationDate(LocalDateTime associationDate) {
+            this.associationDate = associationDate;
+        }
+    }
+
 }

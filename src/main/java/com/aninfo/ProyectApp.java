@@ -52,7 +52,7 @@ public class ProyectApp {
     @PostMapping("/projects/new")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createProject(@RequestBody Project project) {
-        if(!resourceService.resourceExists(project.getAssignedLeader())) {
+        if(project.getAssignedLeader() != null && !resourceService.resourceExists(project.getAssignedLeader())) {
             return new ResponseEntity<>("Assigned resource does not exist",HttpStatus.BAD_REQUEST);
         } else {        
             return new ResponseEntity<>(projectService.createProject(project), HttpStatus.CREATED);
