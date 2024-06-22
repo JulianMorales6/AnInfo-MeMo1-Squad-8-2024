@@ -1,7 +1,12 @@
 package com.aninfo.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -35,6 +40,11 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    @ElementCollection
+    @CollectionTable(name = "task_ticket", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "ticket_id")
+    private List<Long> associatedTickets = new ArrayList<>();
 
     //@ElementCollection
     //@CollectionTable(name = "task_tickets", joinColumns = @JoinColumn(name = "task_id"))
@@ -127,5 +137,21 @@ public class Task {
 
     public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
+    }
+
+    public List<Long> getAssociatedTickets() {
+        return this.associatedTickets;
+    }
+
+    public void setAssociatedTickets(List<Long> associatedTickets) {
+        this.associatedTickets = associatedTickets;
+    }
+
+    public void associateTicket(Long associatedTicket) {
+        this.associatedTickets.add(associatedTicket);
+    }
+    
+    public void disassociateTicket(Long disassociatedTicket) {
+        this.associatedTickets.remove(disassociatedTicket);
     }
 }
