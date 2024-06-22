@@ -61,12 +61,20 @@ public class ProyectApp {
 
     @PostMapping("/projects/{project_id}/tasks/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
+    public ResponseEntity<?> addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
         
+        if(!resourceService.resourceExists(task.getAssignedEmployee())) {
+            return new ResponseEntity<>("Assigned resource does not exist",HttpStatus.BAD_REQUEST);
+        }
         Optional<Project> projectOpt = projectService.findById(project_id);
-        Project project = projectOpt.get();
-        task.setProject(project);
-        return taskService.createTask(task);
+        if(projectOpt.isPresent()) {
+            Project project = projectOpt.get();
+            task.setProject(project);
+        } else {
+            return new ResponseEntity<>("Related project does not exist",HttpStatus.BAD_REQUEST);
+        }
+        Task createdTask = taskService.createTask(task);
+        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
     @GetMapping("/tasks")

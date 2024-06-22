@@ -2,6 +2,7 @@ package com.aninfo.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class ResourceService {
     public List<Resource> getResources() {
         Resource[] resourcesArray = restTemplate.getForObject(API_URL, Resource[].class);
         return Arrays.asList(resourcesArray);
+    }
+
+    public boolean resourceExists(Long resource_id) {
+        return this.getResources().stream().anyMatch(Resource -> Objects.equals(Resource.getId(), resource_id));
     }
 
 }
