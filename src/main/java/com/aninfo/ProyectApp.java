@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,6 +33,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -72,9 +73,11 @@ public class ProyectApp {
 
     @PostMapping("/projects/{project_id}/tasks/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
+    public ResponseEntity<?> addTaskToProject(
+            @PathVariable Long project_id, 
+            @RequestBody Task task) {
         
-        if(!resourceService.resourceExists(task.getAssignedEmployee())) {
+        if(task.getAssignedEmployee() != null && !resourceService.resourceExists(task.getAssignedEmployee())) {
             return new ResponseEntity<>("Assigned resource does not exist",HttpStatus.BAD_REQUEST);
         }
         Optional<Project> projectOpt = projectService.findById(project_id);
@@ -99,7 +102,22 @@ public class ProyectApp {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/projects/{project_id}")
+    @PatchMapping("/tasks/associations/update")
+    public ResponseEntity associateTicketToTasks(
+            @RequestParam(name = "ticket_id", required = true) Long ticket_id,
+            @RequestParam(name = "Add_list", required = false) List<Long> add_list,
+            @RequestParam(name = "Down_list", required = false) List<Long> down_list) {
+        
+        if (add_list != null) {
+            taskService.associateTicketToTasks(ticket_id, add_list);
+        }
+        if (down_list != null) {
+            taskService.disassociateTicketToTasks(ticket_id, down_list);
+        }
+        return ResponseEntity.ok().build();
+        }
+
+    @PatchMapping("/projects/{project_id}")
     public ResponseEntity<Project> updateProject(
             @PathVariable Long project_id,
             @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
@@ -123,7 +141,7 @@ public class ProyectApp {
         return resourceService.getResources();
     }
   
-    @PutMapping("/tasks/{task_id}")
+    @PatchMapping("/tasks/{task_id}")
     public ResponseEntity<Project> updateTask(
             @PathVariable Long task_id,
             @RequestParam(name = "assigned_employee", required = false) Long assigned_employee,

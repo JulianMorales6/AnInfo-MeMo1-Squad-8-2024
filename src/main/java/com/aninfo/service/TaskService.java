@@ -3,7 +3,9 @@ package com.aninfo.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,4 +83,26 @@ public class TaskService {
 
         taskRepository.save(task);
     }
+
+    public void associateTicketToTasks(Long ticket_id, List<Long> task_ids) {
+        this.updateTickets(ticket_id, task_ids, task -> task.associateTicket(ticket_id));
+    }
+
+    public void disassociateTicketToTasks(Long ticket_id, List<Long> task_ids) {
+        this.updateTickets(ticket_id, task_ids, task -> task.disassociateTicket(ticket_id));
+    }
+
+    public void updateTickets(Long ticket_id, List<Long> task_ids, Consumer<Task> taskOperation) {
+        task_ids.forEach(task_id -> {
+            Optional<Task> optionalTask = taskRepository.findById(task_id);
+            if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            taskOperation.accept(task);
+            taskRepository.save(task);
+        } else {
+            //por ahora nada
+        }
+        });
+    }
+
 }
