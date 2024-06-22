@@ -131,7 +131,11 @@ public class ProyectApp {
             @RequestParam(name = "priority", required = false) String priority) {
         
         if (assigned_employee != null)
-            taskService.assignEmployee(task_id, assigned_employee);
+            if(!resourceService.resourceExists(assigned_employee)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                taskService.assignEmployee(task_id, assigned_employee);
+            }
         if (state != null)
             taskService.changeState(task_id, state);        
         if (priority != null)
