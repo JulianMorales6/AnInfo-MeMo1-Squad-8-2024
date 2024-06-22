@@ -50,8 +50,13 @@ public class ProyectApp {
 
     @PostMapping("/projects/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public Project createProject(@RequestBody Project project) {
-        return projectService.createProject(project);
+    public ResponseEntity<?> createProject(@RequestBody Project project) {
+        
+        if(!resourceService.resourceExists(project.getAssignedLeader())) {
+            return new ResponseEntity<>("Assigned resource does not exist",HttpStatus.BAD_REQUEST);
+        } else {        
+            return new ResponseEntity<>(projectService.createProject(project), HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/projects")
@@ -73,8 +78,7 @@ public class ProyectApp {
         } else {
             return new ResponseEntity<>("Related project does not exist",HttpStatus.BAD_REQUEST);
         }
-        Task createdTask = taskService.createTask(task);
-        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(taskService.createTask(task), HttpStatus.CREATED);
     }
 
     @GetMapping("/tasks")
