@@ -48,9 +48,9 @@ public class ProyectApp {
     @Autowired
     private ResourceService resourceService;
 
-    @PostMapping("/projects")
+    @PostMapping("/projects/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public Project creaProject(@RequestBody Project project) {
+    public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);
     }
 
@@ -59,7 +59,7 @@ public class ProyectApp {
         return projectService.getProjects();
     }
 
-    @PostMapping("/projects/{project_id}/tasks")
+    @PostMapping("/projects/{project_id}/tasks/new")
     @ResponseStatus(HttpStatus.CREATED)
     public Task addTaskToProject(@PathVariable Long project_id, @RequestBody Task task) {
         
@@ -69,15 +69,14 @@ public class ProyectApp {
         return taskService.createTask(task);
     }
 
-
     @GetMapping("/tasks")
     public Collection<Task> getTasks() {
         return taskService.getTasks();
     }
 
-    @PutMapping("/projects")
+    @PutMapping("/projects/{project_id}")
     public ResponseEntity<Project> updateProject(
-            @RequestParam(name = "project_id", required = true) Long project_id,
+            @PathVariable Long project_id,
             @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
             @RequestParam(name = "state", required = false) String state) {
         
@@ -96,16 +95,15 @@ public class ProyectApp {
         return resourceService.getResources();
     }
   
-    @PutMapping("/tasks")
+    @PutMapping("/tasks/{task_id}")
     public ResponseEntity<Project> updateTask(
-            @RequestParam(name = "task_id", required = true) Long task_id,
+            @PathVariable Long task_id,
             @RequestParam(name = "assigned_employee", required = false) Long assigned_employee,
             @RequestParam(name = "state", required = false) String state,
             @RequestParam(name = "priority", required = false) String priority) {
         
         if (assigned_employee != null)
             taskService.assignEmployee(task_id, assigned_employee);
-  
         if (state != null)
             taskService.changeState(task_id, state);        
         if (priority != null)
