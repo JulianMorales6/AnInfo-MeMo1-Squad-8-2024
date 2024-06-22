@@ -91,6 +91,13 @@ public class ProyectApp {
     public Collection<Task> getTasks() {
         return taskService.getTasks();
     }
+    
+    @GetMapping("tasks/{task_id}")
+    public ResponseEntity<?> getTaskById(@PathVariable Long task_id) {
+        Optional<Task> taskOpt = taskService.findById(task_id);
+            return taskOpt.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
     @PutMapping("/projects/{project_id}")
     public ResponseEntity<Project> updateProject(
