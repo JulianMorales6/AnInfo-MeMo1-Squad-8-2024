@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,13 +65,31 @@ public class ProyectApp {
     public Collection<Project> getProjects() {
         return projectService.getProjects();
     }
-
+        
     @GetMapping("projects/{project_id}")
     public ResponseEntity<?> getProjectById(@PathVariable Long project_id) {
         Optional<Project> projectOpt = projectService.findById(project_id);
             return projectOpt.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PatchMapping("/projects/{project_id}")
+    public ResponseEntity<Project> updateProject(
+            @PathVariable Long project_id,
+            @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
+            @RequestParam(name = "state", required = false) String state) {
+        
+        if (assigned_leader != null)
+            if(!resourceService.resourceExists(assigned_leader)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                projectService.assignLeader(project_id, assigned_leader);
+            }
+        if (state != null)
+            projectService.changeState(project_id, state);
+            
+        return ResponseEntity.ok().build();
+        }
 
     @PostMapping("/projects/{project_id}/tasks/new")
     @ResponseStatus(HttpStatus.CREATED)
@@ -91,6 +110,12 @@ public class ProyectApp {
         return new ResponseEntity<>(taskService.createTask(task), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/projects/{project_id}")
+    public ResponseEntity<Void> deleteProjectById(@PathVariable Long project_id) {
+        projectService.deleteById(project_id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/tasks")
     public Collection<Task> getTasks() {
         return taskService.getTasks();
@@ -103,52 +128,11 @@ public class ProyectApp {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-/*
-    @PatchMapping("/tasks/associations/update")
-    public ResponseEntity associateTicketToTasks(
-            @RequestParam(name = "ticket_id", required = true) Long ticket_id,
-            @RequestParam(name = "Add_list", required = false) List<Long> add_list,
-            @RequestParam(name = "Down_list", required = false) List<Long> down_list) {
-        
-        if (add_list != null) {
-            taskService.associateTicketToTasks(ticket_id, add_list);
-        }
-        if (down_list != null) {
-            taskService.disassociateTicketToTasks(ticket_id, down_list);
-        }
-        return ResponseEntity.ok().build();
-        }
-*/
-
-    @PatchMapping("/tasks/associations/update/{ticket_id}/{add_list}/{down_list}")
+    @PatchMapping("/tasks/associations/update/")
     public ResponseEntity<?> associateTicketToTasks(@RequestBody AssociationDTO associationDTO){
         
         taskService.updateTicketAssociation(associationDTO);
         return ResponseEntity.ok().build();
-        }
-
-    @PatchMapping("/projects/{project_id}")
-    public ResponseEntity<Project> updateProject(
-            @PathVariable Long project_id,
-            @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
-            @RequestParam(name = "state", required = false) String state) {
-        
-        if (assigned_leader != null)
-            if(!resourceService.resourceExists(assigned_leader)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            } else {
-                projectService.assignLeader(project_id, assigned_leader);
-            }
-        if (state != null)
-            projectService.changeState(project_id, state);
-            
-        return ResponseEntity.ok().build();
-        }
-
-
-    @GetMapping("/resources")
-    public List<Resource> getAllResources() {
-        return resourceService.getResources();
     }
   
     @PatchMapping("/tasks/{task_id}")
@@ -170,6 +154,11 @@ public class ProyectApp {
             taskService.changePriority(task_id, priority);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/resources")
+    public List<Resource> getAllResources() {
+        return resourceService.getResources();
     }
 
     public static void main(String[] args) {
