@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.aninfo.model.AssociationDTO;
 import com.aninfo.model.Project;
 import com.aninfo.model.Resource;
 import com.aninfo.model.Task;
@@ -102,6 +103,7 @@ public class ProyectApp {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+/*
     @PatchMapping("/tasks/associations/update")
     public ResponseEntity associateTicketToTasks(
             @RequestParam(name = "ticket_id", required = true) Long ticket_id,
@@ -114,6 +116,14 @@ public class ProyectApp {
         if (down_list != null) {
             taskService.disassociateTicketToTasks(ticket_id, down_list);
         }
+        return ResponseEntity.ok().build();
+        }
+*/
+
+    @PatchMapping("/tasks/associations/update/{ticket_id}/{add_list}/{down_list}")
+    public ResponseEntity<?> associateTicketToTasks(@RequestBody AssociationDTO associationDTO){
+        
+        taskService.updateTicketAssociation(associationDTO);
         return ResponseEntity.ok().build();
         }
 

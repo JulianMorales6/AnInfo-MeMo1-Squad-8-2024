@@ -10,16 +10,21 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aninfo.model.AssociationDTO;
 import com.aninfo.model.Task;
 import com.aninfo.model.TaskPriority;
 import com.aninfo.model.TaskState;
 import com.aninfo.repository.TaskRepository;
+import com.aninfo.service.TicketSeverityService;
 
 @Service
 public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private TicketSeverityService ticketSeverityService;
 
     public Task createTask(Task Task) {
         if(Task.getStartDate() == null) {
@@ -85,11 +90,17 @@ public class TaskService {
     }
 
     public void associateTicketToTasks(Long ticket_id, List<Long> task_ids) {
-        this.updateTickets(ticket_id, task_ids, task -> task.associateTicket(ticket_id));
+        this.updateTickets(ticket_id, task_ids, task ->{
+             task.associateTicket(ticket_id);
+             task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicket().getTicketId()),task.getFirstTicket().getAssociationDate());
+            });
     }
 
     public void disassociateTicketToTasks(Long ticket_id, List<Long> task_ids) {
-        this.updateTickets(ticket_id, task_ids, task -> task.disassociateTicket(ticket_id));
+        this.updateTickets(ticket_id, task_ids, task -> {
+            task.disassociateTicket(ticket_id);
+            task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicket().getTicketId()),task.getFirstTicket().getAssociationDate());
+            });
     }
 
     public void updateTickets(Long ticket_id, List<Long> task_ids, Consumer<Task> taskOperation) {
@@ -103,6 +114,16 @@ public class TaskService {
             //por ahora nada
         }
         });
+    }
+
+    public void updateTicketAssociation(AssociationDTO associationDTO) {
+
+        if (!associationDTO.getUpList().isEmpty()) {
+            associateTicketToTasks(associationDTO.getTicketId(), associationDTO.getUpList());
+        }
+        if (!associationDTO.getDownList().isEmpty()) {
+            disassociateTicketToTasks(associationDTO.getTicketId(), associationDTO.getDownList());
+        }
     }
 
 }

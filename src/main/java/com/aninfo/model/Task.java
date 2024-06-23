@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
+import java.time.LocalDate;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -18,6 +20,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.aninfo.service.TicketSeverityService;
+
+//import ch.qos.logback.core.util.Duration;
 
 @Entity
 public class Task {
@@ -37,6 +43,8 @@ public class Task {
     private LocalDateTime startDateTime;
     private LocalDateTime finishDateTime;
 
+    private Long DaysToComplete;
+
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
@@ -48,19 +56,12 @@ public class Task {
     @CollectionTable(name = "task_ticket_associations", joinColumns = @JoinColumn(name = "task_id"))
     private List<TicketAssociation> associatedTickets = new ArrayList<>();
 
-    //private list<Long, String> associatedTickets = new HashMap<>();
-    //private List<Long> associatedTickets = new ArrayList<>();
-
-    //@ElementCollection
-    //@CollectionTable(name = "task_tickets", joinColumns = @JoinColumn(name = "task_id"))
-    //@Column(name = "ticket_id")
-    //private List<String> ticketIds = new ArrayList<>();
-
     public Long getId() {
         return id;
     }
 
     public Task(){
+        this.DaysToComplete = -1L;
     }
 
     public Task(String title, String description, Project project) {
@@ -147,19 +148,42 @@ public class Task {
     public List<TicketAssociation> getAssociatedTickets() {
         return this.associatedTickets;
     }
-/*
-    public void setAssociatedTickets(List<Long> associatedTickets) {
-        this.associatedTickets = associatedTickets;
-    }
-*/
-    public void associateTicket(Long associatedTicket) {
 
-        TicketAssociation association = new TicketAssociation(associatedTicket, LocalDateTime.now());
-        this.associatedTickets.add(association);
+    public void setDaysToComplete(Long severityDays, LocalDateTime ticketAssociationDate){        
+        System.out.println(severityDays);
+        System.out.println(ticketAssociationDate);
+
+        ticketAssociationDate.plusDays(severityDays);
+        Duration d = Duration.between(LocalDateTime.now(), ticketAssociationDate);
+        this.DaysToComplete = d.toDays();
+    
+    }
+
+    public long getDaysToComplete(){
+        return this.DaysToComplete;
+    }
+    
+    public TicketAssociation getFirstTicket(){
+
+        if (this.associatedTickets.isEmpty())
+            return null;
+
+        return this.associatedTickets.get(0);
+    }
+
+    public void associateTicket(Long associatedTicket) {
+        if (!isTicketAssociated(associatedTicket)) {
+            TicketAssociation association = new TicketAssociation(associatedTicket, LocalDateTime.now());
+            this.associatedTickets.add(association);
+        }  
     }
     
     public void disassociateTicket(Long disassociatedTicket) {
         this.associatedTickets.removeIf(association -> association.getTicketId().equals(disassociatedTicket));
+    }
+
+    public boolean isTicketAssociated(Long ticketId) {
+        return associatedTickets.stream().anyMatch(association -> association.getTicketId().equals(ticketId));
     }
 
     @Embeddable
@@ -176,7 +200,7 @@ public class Task {
         }
 
         public Long getTicketId() {
-            return ticketId;
+            return this.ticketId;
         }
 
         public void setTicketId(Long ticketId) {
@@ -184,7 +208,7 @@ public class Task {
         }
 
         public LocalDateTime getAssociationDate() {
-            return associationDate;
+            return this.associationDate;
         }
 
         public void setAssociationDate(LocalDateTime associationDate) {
