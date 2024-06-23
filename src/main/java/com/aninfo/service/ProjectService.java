@@ -65,10 +65,12 @@ public class ProjectService {
     public void changeTitle(Long project_id, String title) {
         Project project = projectRepository.findProjectById(project_id);
         project.setTitle(title);
+        projectRepository.save(project);
     }
 
     public void changeDescription(Long project_id, String description) {
         Project project = projectRepository.findProjectById(project_id);
         project.setDescription(description);
+        projectRepository.save(project);
     }
 }
