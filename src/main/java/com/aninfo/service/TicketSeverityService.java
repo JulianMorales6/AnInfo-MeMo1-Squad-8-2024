@@ -12,6 +12,9 @@ public class TicketSeverityService {
     private RestTemplate restTemplate;
     
     public Long getSeverity(Long ticketId) {
+
+        if(ticketId == -1)
+            return -1L;
         /*
         String url = UriComponentsBuilder.fromUriString("http://api.example.com/v1/tickets/{id}/max-response-time")
                 .buildAndExpand(ticketId)

@@ -92,14 +92,14 @@ public class TaskService {
     public void associateTicketToTasks(Long ticket_id, List<Long> task_ids) {
         this.updateTickets(ticket_id, task_ids, task ->{
              task.associateTicket(ticket_id);
-             task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicket().getTicketId()),task.getFirstTicket().getAssociationDate());
+             task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicketId()) , task.getFirstTicketDate());
             });
     }
 
     public void disassociateTicketToTasks(Long ticket_id, List<Long> task_ids) {
         this.updateTickets(ticket_id, task_ids, task -> {
             task.disassociateTicket(ticket_id);
-            task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicket().getTicketId()),task.getFirstTicket().getAssociationDate());
+            task.setDaysToComplete(ticketSeverityService.getSeverity(task.getFirstTicketId()) , task.getFirstTicketDate());
             });
     }
 

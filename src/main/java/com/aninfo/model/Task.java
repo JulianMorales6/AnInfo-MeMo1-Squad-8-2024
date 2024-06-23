@@ -21,6 +21,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.apache.tomcat.jni.Local;
+
 import com.aninfo.service.TicketSeverityService;
 
 //import ch.qos.logback.core.util.Duration;
@@ -150,25 +152,34 @@ public class Task {
     }
 
     public void setDaysToComplete(Long severityDays, LocalDateTime ticketAssociationDate){        
-        System.out.println(severityDays);
-        System.out.println(ticketAssociationDate);
 
-        ticketAssociationDate.plusDays(severityDays);
-        Duration d = Duration.between(LocalDateTime.now(), ticketAssociationDate);
-        this.DaysToComplete = d.toDays();
-    
+        if(severityDays != -1){
+            LocalDateTime adjustedDate = ticketAssociationDate.plusDays(severityDays);
+            Duration d = Duration.between(LocalDateTime.now(), adjustedDate);
+            this.DaysToComplete = d.toDays();
+        }
+        else
+            this.DaysToComplete = -1L;
     }
 
     public long getDaysToComplete(){
         return this.DaysToComplete;
     }
     
-    public TicketAssociation getFirstTicket(){
+    public LocalDateTime getFirstTicketDate(){
 
         if (this.associatedTickets.isEmpty())
             return null;
 
-        return this.associatedTickets.get(0);
+        return this.associatedTickets.get(0).getAssociationDate();
+    }
+
+    public Long getFirstTicketId(){
+
+        if (this.associatedTickets.isEmpty())
+            return -1L;
+
+        return this.associatedTickets.get(0).getTicketId();
     }
 
     public void associateTicket(Long associatedTicket) {
