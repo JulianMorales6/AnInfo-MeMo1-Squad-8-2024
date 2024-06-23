@@ -128,7 +128,7 @@ public class ProyectApp {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PatchMapping("/tasks/associations/update/")
+    @PatchMapping("/tasks/associations/update")
     public ResponseEntity<?> associateTicketToTasks(@RequestBody AssociationDTO associationDTO){
         
         taskService.updateTicketAssociation(associationDTO);
