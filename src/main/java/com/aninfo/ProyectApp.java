@@ -145,10 +145,10 @@ public class ProyectApp {
             projectService.changeState(project_id, state);
 
         if (title != null)
-            projectService.changeTitle(project_id, state);
+            projectService.changeTitle(project_id, title);
 
         if (description != null)
-            projectService.changeDescription(project_id, state);
+            projectService.changeDescription(project_id, description);
             
         return ResponseEntity.ok().build();
         }
