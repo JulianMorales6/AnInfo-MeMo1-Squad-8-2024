@@ -29,5 +29,11 @@ COPY --from=builder /app/build/libs/*.jar /app/app.jar
 # Expose the port the app runs on (optional, change if necessary)
 EXPOSE 8080
 
+# Set environment variables for database configuration
+ENV SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+ENV SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+ENV SPRING_JPA_HIBERNATE_DDL_AUTO=${SPRING_JPA_HIBERNATE_DDL_AUTO}
+
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
