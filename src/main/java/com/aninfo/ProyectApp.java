@@ -126,7 +126,7 @@ public class ProyectApp {
         }
 */
 
-    @PatchMapping("/tasks/associations/update/{ticket_id}/{add_list}/{down_list}")
+    @PatchMapping("/tasks/associations/update")
     public ResponseEntity<?> associateTicketToTasks(@RequestBody AssociationDTO associationDTO){
         
         taskService.updateTicketAssociation(associationDTO);
