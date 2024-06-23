@@ -95,6 +95,12 @@ public class ProyectApp {
     public Collection<Task> getTasks() {
         return taskService.getTasks();
     }
+
+    @GetMapping("/proyect/{project_id}/tasks/get")
+    public Collection<Task> getTasksFromProject(@PathVariable Long project_id) {
+
+        return taskService.getTasksFromProject(project_id);
+    }
     
     @GetMapping("tasks/{task_id}")
     public ResponseEntity<?> getTaskById(@PathVariable Long task_id) {
