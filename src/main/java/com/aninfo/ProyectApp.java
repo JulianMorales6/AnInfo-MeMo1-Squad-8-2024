@@ -131,6 +131,8 @@ public class ProyectApp {
     public ResponseEntity<Project> updateProject(
             @PathVariable Long project_id,
             @RequestParam(name = "assigned_leader", required = false) Long assigned_leader,
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "description", required = false) String description,
             @RequestParam(name = "state", required = false) String state) {
         
         if (assigned_leader != null)
@@ -141,6 +143,12 @@ public class ProyectApp {
             }
         if (state != null)
             projectService.changeState(project_id, state);
+
+        if (title != null)
+            projectService.changeTitle(project_id, state);
+
+        if (description != null)
+            projectService.changeDescription(project_id, state);
             
         return ResponseEntity.ok().build();
         }

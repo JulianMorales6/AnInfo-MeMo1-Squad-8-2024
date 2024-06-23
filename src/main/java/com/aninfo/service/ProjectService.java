@@ -57,9 +57,18 @@ public class ProjectService {
             project.setState(ProjectState.CLOSED);
         }
         else if (state.equals(ProjectState.FINISHED.toString())) {
-            project.setState(ProjectState.FINISHED);
+            project.finish();
         }
         projectRepository.save(project);
     }
 
+    public void changeTitle(Long project_id, String title) {
+        Project project = projectRepository.findProjectById(project_id);
+        project.setTitle(title);
+    }
+
+    public void changeDescription(Long project_id, String description) {
+        Project project = projectRepository.findProjectById(project_id);
+        project.setDescription(description);
+    }
 }
