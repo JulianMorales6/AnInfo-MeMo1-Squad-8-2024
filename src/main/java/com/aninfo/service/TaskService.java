@@ -42,6 +42,10 @@ public class TaskService {
     public Collection<Task> getTasks() {
         return taskRepository.findAll();
     }
+    
+    public Collection<Task> getTasksFromProject(Long project_id) {
+        return taskRepository.findByProjectId(project_id);
+    }
 
     public Optional<Task> findById(Long id) {
         return taskRepository.findById(id);

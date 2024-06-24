@@ -47,8 +47,16 @@ public class Project {
         return this.title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getAssignedLeader() {
@@ -79,15 +87,7 @@ public class Project {
         this.assignedLeader = assignedLeader;
         this.state = ProjectState.PROGRESS;
     }
-/*
-    public void close() {
-        this.state = ProjectState.CLOSED;
-    }
 
-    public void block() {
-        this.state = ProjectState.BLOCKED;
-    }
-*/
     public void finish() {
         this.state = ProjectState.FINISHED;
         this.finishDateTime = LocalDateTime.now();
