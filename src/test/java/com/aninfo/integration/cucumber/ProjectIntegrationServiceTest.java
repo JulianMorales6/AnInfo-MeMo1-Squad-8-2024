@@ -1,6 +1,7 @@
 package com.aninfo.integration.cucumber;
 
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,12 @@ public class ProjectIntegrationServiceTest {
     ResourceService resourceService;
 
     @Test
-    Project createProject(String title, String description) {
-        return projectService.createProject(new Project(title, description));
+    public void testCreateProject() {
+        String title = "New Project";
+        String description = "Project Description";
+        Project project = projectService.createProject(new Project(title, description));
+        assertNotNull(project);
+        assertNotNull(project.getId());
     }
+
 }
