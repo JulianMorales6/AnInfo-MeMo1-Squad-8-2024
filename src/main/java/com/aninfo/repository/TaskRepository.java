@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Collection<Task> findByProjectId(Long projectId);
+    
     Task findTaskById(Long id);
 
     @Override

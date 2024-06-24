@@ -1,8 +1,12 @@
 package com.aninfo;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.swing.text.html.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -102,11 +106,30 @@ public class ProyectApp {
         return taskService.getTasksFromProject(project_id);
     }
     
+    
+/*
     @GetMapping("tasks/{task_id}")
     public ResponseEntity<?> getTaskById(@PathVariable Long task_id) {
         Optional<Task> taskOpt = taskService.findById(task_id);
             return taskOpt.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+*/
+    
+    @GetMapping("/tasks/")
+    public ResponseEntity<?> getTasksById(@RequestParam String ids) {
+
+        String[] idsArray = ids.split(",");
+        List<Long> taskIds = Arrays.stream(idsArray)
+                                .map(Long::parseLong)
+                                .collect(Collectors.toList());
+        List<Task> taskList = taskService.getTasksByIds(taskIds);
+
+        if (taskList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(taskList, HttpStatus.OK);
+        }
     }
 
 /*
@@ -164,7 +187,11 @@ public class ProyectApp {
     public List<Resource> getAllResources() {
         return resourceService.getResources();
     }
-  
+
+    
+    //////////// agregar poder meter una fecha de inicio que no sea la actual
+
+
     @PatchMapping("/tasks/{task_id}")
     public ResponseEntity<Project> updateTask(
             @PathVariable Long task_id,

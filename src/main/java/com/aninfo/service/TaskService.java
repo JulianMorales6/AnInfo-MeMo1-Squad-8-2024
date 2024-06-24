@@ -130,4 +130,8 @@ public class TaskService {
         }
     }
 
+    public List<Task> getTasksByIds(List<Long> taskIds) {
+        return taskRepository.findAllById(taskIds);
+    }
+
 }
