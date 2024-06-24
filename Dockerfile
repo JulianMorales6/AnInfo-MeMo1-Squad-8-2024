@@ -15,7 +15,7 @@ COPY . /app
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build
+RUN ./gradlew build -x test
 
 # Use the official OpenJDK 11 image for running the application
 FROM openjdk:11-jre-slim
