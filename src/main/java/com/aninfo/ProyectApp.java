@@ -154,7 +154,7 @@ public class ProyectApp {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/projects/{project_id}")
+    @DeleteMapping("/tasks/{task_id}")
     public ResponseEntity<Void> deleteTaskById(@PathVariable Long task_id) {
         taskService.deleteById(task_id);
         return ResponseEntity.noContent().build();
