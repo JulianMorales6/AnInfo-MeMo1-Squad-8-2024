@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.swing.text.html.Option;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -106,16 +104,6 @@ public class ProyectApp {
         return taskService.getTasksFromProject(project_id);
     }
     
-    
-/*
-    @GetMapping("tasks/{task_id}")
-    public ResponseEntity<?> getTaskById(@PathVariable Long task_id) {
-        Optional<Task> taskOpt = taskService.findById(task_id);
-            return taskOpt.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-*/
-    
     @GetMapping("/tasks/")
     public ResponseEntity<?> getTasksById(@RequestParam String ids) {
 
@@ -131,23 +119,6 @@ public class ProyectApp {
             return new ResponseEntity<>(taskList, HttpStatus.OK);
         }
     }
-
-/*
-    @PatchMapping("/tasks/associations/update")
-    public ResponseEntity associateTicketToTasks(
-            @RequestParam(name = "ticket_id", required = true) Long ticket_id,
-            @RequestParam(name = "Add_list", required = false) List<Long> add_list,
-            @RequestParam(name = "Down_list", required = false) List<Long> down_list) {
-        
-        if (add_list != null) {
-            taskService.associateTicketToTasks(ticket_id, add_list);
-        }
-        if (down_list != null) {
-            taskService.disassociateTicketToTasks(ticket_id, down_list);
-        }
-        return ResponseEntity.ok().build();
-        }
-*/
 
     @PatchMapping("/tasks/associations/update")
     public ResponseEntity<?> associateTicketToTasks(@RequestBody AssociationDTO associationDTO){
@@ -182,15 +153,10 @@ public class ProyectApp {
         return ResponseEntity.ok().build();
         }
 
-
     @GetMapping("/resources")
     public List<Resource> getAllResources() {
         return resourceService.getResources();
     }
-
-    
-    //////////// agregar poder meter una fecha de inicio que no sea la actual
-
 
     @PatchMapping("/tasks/{task_id}")
     public ResponseEntity<Project> updateTask(

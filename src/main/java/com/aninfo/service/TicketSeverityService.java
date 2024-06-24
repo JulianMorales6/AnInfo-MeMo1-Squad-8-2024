@@ -15,13 +15,13 @@ public class TicketSeverityService {
 
         if(ticketId == -1)
             return -1L;
-        /*
-        String url = UriComponentsBuilder.fromUriString("http://api.example.com/v1/tickets/{id}/max-response-time")
+        
+        String url = UriComponentsBuilder.fromUriString("https://sistema-de-gestion-soporte-3.onrender.com/v1/tickets/{id}/max-response-days")
                 .buildAndExpand(ticketId)
                 .toUriString();
-
+                
         Long severityDays = restTemplate.getForObject(url, Long.class);
-*/      Long severityDays = 7L;
+
         return severityDays;
     }
 }
